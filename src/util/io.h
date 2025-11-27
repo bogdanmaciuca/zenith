@@ -1,3 +1,4 @@
+#pragma once
 #include "pch.h"
 #include "util/common.h"
 
@@ -27,5 +28,5 @@ void io_print_assertion(
   i32 line,
   const char* message
 );
-#endif ZN_DEBUG
+#endif // ZN_DEBUG
 

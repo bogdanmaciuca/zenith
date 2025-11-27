@@ -17,7 +17,7 @@ IO_ReadFileError io_read_file(char const* filepath, char** data, usize* size) {
 
   fseek(file, 0, SEEK_SET);
   usize bytes_read = fread(*data, sizeof(char), *size, file);
-  if (bytes_read < size) {
+  if (bytes_read < *size) {
     return IO_READ_FILE_ERROR_WHILE_READING;
   }
 
@@ -29,7 +29,12 @@ void io_free_file(char *data) {
 }
 
 IO_WriteFileError io_write_binary(const char* filepath, void* data, usize size) {
-  FILE* file = fopen(filepath, "wb");
+  i32 file_descriptor = open(filepath, O_WRONLY | O_CREAT, 0777);
+  if (file_descriptor == -1) {
+    return IO_WRITE_FILE_COULD_NOT_OPEN;
+  }
+
+  FILE* file = fdopen(file_descriptor, "wb");
   if (file == NULL) {
     return IO_WRITE_FILE_COULD_NOT_OPEN;
   }
@@ -38,6 +43,8 @@ IO_WriteFileError io_write_binary(const char* filepath, void* data, usize size) 
   if (bytes_written < size) {
     return IO_WRITE_FILE_ERROR_WHILE_WRITING;
   }
+  fclose(file);
+  close(file_descriptor);
 
   return IO_WRITE_FILE_SUCCESS;
 }
@@ -51,7 +58,7 @@ void io_print_assertion(
   const char* message
 ) {
   puts("=== ASSERTION FAILED ===");
-  printf("In %s:%d:\n\t%s => %s\n\n", file, line, condition, message);
+  printf("In %s:%d: %s():\n\t%s => %s\n\n", file, line, function, condition, message);
 }
 #endif
 

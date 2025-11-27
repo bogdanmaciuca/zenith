@@ -1,4 +1,5 @@
 #pragma once
+#include "common.h"
 
 typedef enum {
   ELF_CREATE_SUCCESS,
@@ -10,7 +11,15 @@ typedef enum {
   ELF_RELOCATABLE,
 } ElfType;
 
-ElfCreateError elf_create(ElfType type);
+typedef struct {
+  ElfType type;
+  void*   text;
+  usize   text_size;
+  void*   data;
+  usize   data_size;
+} ElfData;
 
-void elf_free();
+ElfCreateError elf_create(void** elf, const usize* size, const ElfData* const elf_data);
+
+void elf_free(void* elf);
 

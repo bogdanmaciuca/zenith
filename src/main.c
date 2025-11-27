@@ -17,7 +17,7 @@ int main() {
     0xbf,                                    // mov rdi (32 bit)
     1, 0, 0, 0,                              // stdout
     0x48, 0xbe,                              // mov rsi, 64 bit pointer
-    0x00, 0x10, 0x40, 0, 0, 0, 0, 0,         // Hello strings address in virtual memory
+    0xb0, 0x10, 0x40, 0, 0, 0, 0, 0,         // Hello strings address in virtual memory
     0xba,                                    // mov rdx (32bit)
     7, 0, 0, 0,                              // number of bytes in Hello!\n
     0xf, 0x5,                                // syscall
